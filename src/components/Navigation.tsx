@@ -31,21 +31,27 @@ const linkClasses = `cursor-pointer hover:text-white/70`;
 const Navigation = memo(() => {
   return (
     <>
-      {/* Top left logo - responsive positioning */}
+      {/* Top left logo and profession - responsive positioning */}
       <motion.div
-        className={`${baseClasses} top-4 left-4 md:left-6 text-lg md:text-xl tracking-[0.2em] ${linkClasses} hover:text-white/80`}
+        className={`${baseClasses} top-4 left-4 md:left-6`}
         style={{ zIndex: Z_INDEX.NAVIGATION }}
         variants={slideFromLeft}
         initial="hidden"
         animate="visible"
         transition={transitionConfig}
       >
-        <Link href="/">PB</Link>
+        <Link href="/" className={`text-lg md:text-xl tracking-[0.2em] ${linkClasses} hover:text-white/80 block`}>
+          PB
+        </Link>
+        {/* Profession line - visible on mobile below name, hidden on desktop */}
+        <div className="block md:hidden text-xs text-white/80 mt-1">
+          Independent UI/UX Designer
+        </div>
       </motion.div>
 
-      {/* Top center profession - responsive positioning */}
+      {/* Top center profession - desktop only */}
       <motion.div
-        className={`${baseClasses} top-4 left-1/2 -translate-x-1/2 text-sm md:text-base text-center`}
+        className={`${baseClasses} top-4 left-1/2 -translate-x-1/2 text-sm md:text-base text-center hidden md:block`}
         style={{ zIndex: Z_INDEX.NAVIGATION }}
         variants={slideFromTop}
         initial="hidden"
