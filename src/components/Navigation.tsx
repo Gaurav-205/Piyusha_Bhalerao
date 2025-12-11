@@ -33,7 +33,7 @@ const Navigation = memo(() => {
     <>
       {/* Top left logo - responsive positioning */}
       <motion.div
-        className={`${baseClasses} top-4 left-4 md:left-6 text-base md:text-lg tracking-[0.2em] ${linkClasses} hover:text-white/80`}
+        className={`${baseClasses} top-4 left-4 md:left-6 text-lg md:text-xl tracking-[0.2em] ${linkClasses} hover:text-white/80`}
         style={{ zIndex: Z_INDEX.NAVIGATION }}
         variants={slideFromLeft}
         initial="hidden"
@@ -45,7 +45,7 @@ const Navigation = memo(() => {
 
       {/* Top center profession - responsive positioning */}
       <motion.div
-        className={`${baseClasses} top-4 left-1/2 -translate-x-1/2 text-xs md:text-sm`}
+        className={`${baseClasses} top-4 left-1/2 -translate-x-1/2 text-sm md:text-base text-center`}
         style={{ zIndex: Z_INDEX.NAVIGATION }}
         variants={slideFromTop}
         initial="hidden"
@@ -57,7 +57,7 @@ const Navigation = memo(() => {
 
       {/* Top right About link - responsive positioning */}
       <motion.div
-        className={`${baseClasses} top-4 right-4 md:right-6 text-xs md:text-sm ${linkClasses}`}
+        className={`${baseClasses} top-4 right-4 md:right-6 text-sm md:text-base ${linkClasses}`}
         style={{ zIndex: Z_INDEX.NAVIGATION }}
         variants={slideFromRight}
         initial="hidden"

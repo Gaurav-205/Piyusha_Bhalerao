@@ -18,12 +18,12 @@ const Hero = memo(() => {
         className="h-screen w-full rounded-lg overflow-hidden"
       />
       
-      {/* Main title overlay */}
+      {/* Main title overlay - perfectly centered */}
       <div 
-        className="h-screen inset-0 pointer-events-none fixed flex items-center justify-center text-center px-3 mix-blend-exclusion text-white"
+        className="h-screen inset-0 pointer-events-none fixed flex items-center justify-center mix-blend-exclusion text-white"
         style={{ zIndex: Z_INDEX.GALLERY_OVERLAY }}
       >
-        <h1 className="font-serif text-4xl md:text-7xl tracking-tight">
+        <h1 className="font-serif text-4xl md:text-7xl tracking-tight text-center">
           <span className="italic">Piyusha Bhalerao</span>
         </h1>
       </div>

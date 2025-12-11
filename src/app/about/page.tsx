@@ -322,14 +322,14 @@ export default function AboutPage() {
         </section>
       </div>
 
-      {/* Bottom left info - responsive positioning */}
+      {/* Bottom left info - hidden on mobile, visible on desktop */}
       <motion.div
-        className="fixed bottom-4 left-4 md:bottom-6 md:left-6 z-50"
+        className="fixed bottom-6 left-6 z-50 hidden md:block"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 1.8 }}
       >
-        <div className="flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-4 font-montserrat text-xs md:text-sm text-white/60">
+        <div className="flex items-center space-x-4 font-montserrat text-sm text-white/60">
           <div>
             <p>GMT+5:30</p>
             <p>Available</p>
