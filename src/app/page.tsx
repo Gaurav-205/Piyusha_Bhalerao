@@ -4,16 +4,30 @@ import { useState, useEffect, useCallback } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import Navigation from '@/components/Navigation';
 import Hero from '@/components/Hero';
-import { SmoothCursor } from '@/components/ui/SmoothCursor';
+import FadeTransition from '@/components/ui/FadeTransition';
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
 
   const handleLoadingComplete = useCallback(() => {
     setIsLoading(false);
+    // Mark that the user has seen the loading screen
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('hasSeenLoading', 'true');
+    }
   }, []);
 
   useEffect(() => {
+    // Check if this is the first visit in this session
+    if (typeof window !== 'undefined') {
+      const hasSeenLoading = sessionStorage.getItem('hasSeenLoading');
+      if (!hasSeenLoading) {
+        setIsLoading(true);
+        setShowLoading(true);
+      }
+    }
+
     // Prevent scrolling during loading and always after
     document.body.style.overflow = 'hidden';
     
@@ -22,15 +36,17 @@ export default function Home() {
     };
   }, []);
 
+  // If loading, show loading screen without fade transition
+  if (showLoading && isLoading) {
+    return <LoadingScreen onComplete={handleLoadingComplete} />;
+  }
+
   return (
-    <>
-      {isLoading && <LoadingScreen onComplete={handleLoadingComplete} />}
-      
+    <FadeTransition>
       <div className="min-h-screen bg-black cursor-none overflow-hidden">
-        <SmoothCursor />
         <Navigation />
         <Hero />
       </div>
-    </>
+    </FadeTransition>
   );
 }

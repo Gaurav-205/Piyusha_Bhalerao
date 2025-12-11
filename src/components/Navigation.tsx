@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { memo } from 'react';
+import Link from 'next/link';
 import { ANIMATION_DELAYS, ANIMATION_DURATIONS, Z_INDEX } from '@/lib/constants';
 
 const transitionConfig = {
@@ -39,7 +40,7 @@ const Navigation = memo(() => {
         animate="visible"
         transition={transitionConfig}
       >
-        PB
+        <Link href="/">PB</Link>
       </motion.div>
 
       {/* Top center profession */}
@@ -63,7 +64,7 @@ const Navigation = memo(() => {
         animate="visible"
         transition={transitionConfig}
       >
-        About
+        <Link href="/about">About</Link>
       </motion.div>
 
       {/* Bottom right social links */}
@@ -83,13 +84,13 @@ const Navigation = memo(() => {
           E-mail
         </a>
         <a 
-          href="https://twitter.com" 
+          href="https://behance.net" 
           target="_blank" 
           rel="noopener noreferrer" 
           className={linkClasses}
-          aria-label="Visit Twitter profile"
+          aria-label="Visit Behance profile"
         >
-          Twitter
+          Behance
         </a>
         <a 
           href="https://instagram.com" 

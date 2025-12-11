@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SmoothCursor } from "@/components/ui/SmoothCursor";
 
 export const metadata: Metadata = {
   title: "Piyusha Bhalerao - UI/UX Designer",
@@ -31,6 +32,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-montserrat antialiased">
+        <SmoothCursor />
         {children}
       </body>
     </html>
