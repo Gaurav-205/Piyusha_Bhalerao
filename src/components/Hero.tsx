@@ -30,10 +30,11 @@ const Hero = memo(() => {
       
       {/* Navigation instructions */}
       <div 
-        className="text-center fixed bottom-10 left-0 right-0 font-mono uppercase text-[11px] font-semibold text-white"
+        className="text-center fixed bottom-10 left-0 right-0 font-mono uppercase text-[11px] font-semibold text-white px-4"
         style={{ zIndex: Z_INDEX.GALLERY_OVERLAY }}
       >
-        <p>Use mouse wheel, arrow keys, or touch to navigate</p>
+        <p className="hidden md:block">Use mouse wheel, arrow keys, or touch to navigate</p>
+        <p className="block md:hidden">Swipe or pinch to zoom in/out to navigate</p>
         <p className="opacity-60">Auto-play resumes after 3 seconds of inactivity</p>
       </div>
     </main>

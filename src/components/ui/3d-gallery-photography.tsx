@@ -204,6 +204,14 @@ const GalleryScene = memo(({
   const [scrollVelocity, setScrollVelocity] = useState(0);
   const [autoPlay, setAutoPlay] = useState(true);
   const lastInteraction = useRef(Date.now());
+  
+  // Touch/pinch gesture state
+  const touchState = useRef({
+    initialDistance: 0,
+    lastDistance: 0,
+    touches: [] as Touch[],
+    isMultiTouch: false,
+  });
 
   const normalizedImages = useMemo(
     () =>
@@ -290,18 +298,92 @@ const GalleryScene = memo(({
     [speed]
   );
 
+  // Calculate distance between two touches
+  const getTouchDistance = useCallback((touch1: Touch, touch2: Touch) => {
+    const dx = touch1.clientX - touch2.clientX;
+    const dy = touch1.clientY - touch2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }, []);
+
+  // Handle touch start
+  const handleTouchStart = useCallback((event: TouchEvent) => {
+    const touches = Array.from(event.touches);
+    touchState.current.touches = touches;
+    
+    if (touches.length === 2) {
+      touchState.current.isMultiTouch = true;
+      touchState.current.initialDistance = getTouchDistance(touches[0], touches[1]);
+      touchState.current.lastDistance = touchState.current.initialDistance;
+      setAutoPlay(false);
+      lastInteraction.current = Date.now();
+    } else if (touches.length === 1) {
+      touchState.current.isMultiTouch = false;
+    }
+  }, [getTouchDistance]);
+
+  // Handle touch move
+  const handleTouchMove = useCallback((event: TouchEvent) => {
+    event.preventDefault();
+    const touches = Array.from(event.touches);
+    
+    if (touches.length === 2 && touchState.current.isMultiTouch) {
+      const currentDistance = getTouchDistance(touches[0], touches[1]);
+      const distanceDelta = currentDistance - touchState.current.lastDistance;
+      
+      // Convert pinch gesture to scroll velocity
+      // Pinch out (zoom in) = move forward, Pinch in (zoom out) = move backward
+      const velocityChange = distanceDelta * 0.02 * speed;
+      setScrollVelocity((prev) => prev + velocityChange);
+      
+      touchState.current.lastDistance = currentDistance;
+      lastInteraction.current = Date.now();
+    } else if (touches.length === 1 && !touchState.current.isMultiTouch) {
+      // Single touch swipe for mobile
+      const touch = touches[0];
+      const lastTouch = touchState.current.touches[0];
+      
+      if (lastTouch) {
+        const deltaY = touch.clientY - lastTouch.clientY;
+        const velocityChange = deltaY * 0.01 * speed;
+        setScrollVelocity((prev) => prev + velocityChange);
+        lastInteraction.current = Date.now();
+      }
+      
+      touchState.current.touches = touches;
+    }
+  }, [getTouchDistance, speed]);
+
+  // Handle touch end
+  const handleTouchEnd = useCallback((event: TouchEvent) => {
+    const touches = Array.from(event.touches);
+    
+    if (touches.length < 2) {
+      touchState.current.isMultiTouch = false;
+      touchState.current.initialDistance = 0;
+      touchState.current.lastDistance = 0;
+    }
+    
+    touchState.current.touches = touches;
+  }, []);
+
   useEffect(() => {
     const canvas = document.querySelector('canvas');
     if (canvas) {
       canvas.addEventListener('wheel', handleWheel, { passive: false });
+      canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+      canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+      canvas.addEventListener('touchend', handleTouchEnd, { passive: false });
       document.addEventListener('keydown', handleKeyDown);
 
       return () => {
         canvas.removeEventListener('wheel', handleWheel);
+        canvas.removeEventListener('touchstart', handleTouchStart);
+        canvas.removeEventListener('touchmove', handleTouchMove);
+        canvas.removeEventListener('touchend', handleTouchEnd);
         document.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [handleWheel, handleKeyDown]);
+  }, [handleWheel, handleKeyDown, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   // Auto-play logic
   useEffect(() => {
